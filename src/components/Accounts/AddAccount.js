@@ -5,9 +5,6 @@ import axios from "axios";
 
 export const AddAccount = () => {
   let history = useHistory();
-
-//   const { addAccount, accounts } = useContext(GlobalContext);
-
   const [user, setUser] = useState();
   const [branch, setBranch] = useState("");
   const [ac_no, setAcNo] = useState("");
@@ -17,24 +14,20 @@ export const AddAccount = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const newAccount = {
-        // user,
         branch,
         ac_no,
         name,
     };
-        let token = localStorage.getItem('token'); // localStorage_token);
-        
-        alert(token)
-        // axios.post("/sbi/account/", newAccount, { headers: {"Authorization" : `Bearer ${token}`} })
-        axios({
-            method: 'post',
-            url: "/sbi/account/",
-            headers: {"Authorization" : `Token ${token['token']}`},
-            data: newAccount,
-        }).then((res) => 
-            // this.refreshList()
-            alert('saved')
-        );
+    let token = localStorage.getItem('token'); 
+    axios.post("/sbi/account/", newAccount, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`
+      }
+    })
+    .then((response) => {
+        alert('saved')
+    });
     history.push("/");
   };
   

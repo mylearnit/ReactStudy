@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 // import { Navigate, useNavigate } from 'react-router-dom'
 
 // async function loginUser(credentials) {
@@ -23,8 +23,8 @@ import { Link, useNavigate } from 'react-router-dom';
 // }
 
 export default function Login() {
-    // let history = useHistory();
-    const navigate = useNavigate()
+    let history = useHistory();
+    // const navigate = useNavigate()
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
   const handleSubmit = async e => {
@@ -35,9 +35,10 @@ export default function Login() {
             console.log('login res--------', res);
             if (res) {
                 const token = res.data.token;
-                localStorage.setItem('token', JSON.stringify(token));
+                localStorage.setItem('token', token); // JSON.stringify(token));
                 // history.push("/");
-                navigate('/')
+                // navigate('/')
+                window.location.reload();
             } else {
                 console('error')
             }
