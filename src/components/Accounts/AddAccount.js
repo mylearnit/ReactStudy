@@ -1,17 +1,20 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from "axios";
-// import { GlobalContext } from '../context/GlobalState';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
 
 export const AddAccount = () => {
   let history = useHistory();
-  const [user, setUser] = useState();
   const [branch, setBranch] = useState("");
   const [ac_no, setAcNo] = useState("");
   const [name, setName] = useState("");
   
   
-  const onSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const newAccount = {
         branch,
@@ -19,6 +22,7 @@ export const AddAccount = () => {
         name,
     };
     let token = localStorage.getItem('token'); 
+    
     axios.post("/sbi/account/", newAccount, {
       headers: {
         'Content-Type': 'application/json',
@@ -26,73 +30,52 @@ export const AddAccount = () => {
       }
     })
     .then((response) => {
-        alert('saved')
+      history.push("/");
     });
-    history.push("/");
+    
   };
   
 
   return (
-    <React.Fragment>
-      <div className="w-full max-w-sm container mt-20 mx-auto">
-        <form onSubmit={onSubmit}>
-          <div className="w-full mb-5">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="name"
-            >
-              Name of account
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              placeholder="Enter name"
-            />
-          </div>
+    <Row>
+      <Col xs={12} sm={4}>
+      <Card body>
+        <h1>Add Account</h1>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Name of account</Form.Label>
+            <Form.Control
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            placeholder="Enter name"
+             />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Branch</Form.Label>
+            <Form.Control
+            value={branch}
+            onChange={(e) => setBranch(e.target.value)}
+            type="text"
+            placeholder="Enter branch"
+             />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Account Number</Form.Label>
+            <Form.Control
+            value={ac_no}
+            onChange={(e) => setAcNo(e.target.value)}
+            type="text"
+            placeholder="Enter account no"
+             />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+        </Card>
+      </Col>
+    </Row>
 
-          <div className="w-full mb-5">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="branch"
-            >
-              Name of account
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600"
-              value={branch}
-              onChange={(e) => setBranch(e.target.value)}
-              type="text"
-              placeholder="Enter branch"
-            />
-          </div>
-          <div className="w-full mb-5">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="ac_no"
-            >
-              Name of account
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600"
-              value={ac_no}
-              onChange={(e) => setAcNo(e.target.value)}
-              type="text"
-              placeholder="Enter ac_no"
-            />
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <button className="mt-5 bg-green-400 w-full hover:bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-              Add Account
-            </button>
-          </div>
-          <div className="text-center mt-4 text-gray-500">
-            <Link to="/">Cancel</Link>
-          </div>
-        </form>
-      </div>
-    </React.Fragment>
   );
 };
